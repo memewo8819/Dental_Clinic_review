@@ -57,6 +57,20 @@ class ClinicsTableSeeder extends Seeder
                 'lng' => '136.943605',
                 'created_at' => now(),
                 'updated_at' => now()
+            ],[
+                'id' => 4,
+                'clinic_name' => 'あじさい歯科医院',
+                'tel' => '0574-24-1881',
+                'site_url' => 'http://www.takenokoshika.com/',
+                'email' => 'info@takenokoshika.com',
+                'postal_code' => '505-0052',
+                'pref' => '岐阜県',
+                'city' => '美濃加茂市',
+                'town' => '加茂野町772-1',
+                'lat' => '35.463950',
+                'lng' => '136.976140',
+                'created_at' => now(),
+                'updated_at' => now()
             ]
         ];
 

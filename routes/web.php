@@ -19,6 +19,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'ClinicController@searchClinic');
 
+Route::get('clinics/index_pref', 'ClinicController@index_pref')->name('clinics.index_pref');
+Route::get('clinics/index_city', 'ClinicController@index_city')->name('clinics.index_city');
+Route::resource('clinics', 'ClinicController', ['only' => ['show']]);
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

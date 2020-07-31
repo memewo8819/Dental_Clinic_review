@@ -25,4 +25,15 @@ class Clinic extends Model
     {
         return $this->hasMany(Image::class);
     }
+
+    public function prefList()
+    {
+        $pref_list = [
+            '愛知県',
+            '岐阜県',
+            '三重県',
+        ];
+
+        return;
+    }
 }
