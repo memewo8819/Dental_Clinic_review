@@ -23,6 +23,9 @@ Route::get('clinics/index_pref', 'ClinicController@index_pref')->name('clinics.i
 Route::get('clinics/index_city', 'ClinicController@index_city')->name('clinics.index_city');
 Route::resource('clinics', 'ClinicController', ['only' => ['show']]);
 
+// コメント関連
+Route::resource('comments', 'CommentController', ['only' => ['store']]);
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');

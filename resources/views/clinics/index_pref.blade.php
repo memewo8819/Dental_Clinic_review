@@ -26,7 +26,9 @@
                     @foreach($clinic->images as $image)
                         <img src="{{ $image->image_path }}" width="300" alt="{{ $clinic->clinic_name }}">
                     @endforeach
-                    <p style="font-weight: bold; color: green;">{{ $clinic->clinic_name }}</p>
+                    <a href="{{ url('clinics/' .$clinic->id) }}" class="text-secondary">
+                        <p style="font-weight: bold; color: green;">{{ $clinic->clinic_name }}</p>
+                    </a>
                 </div>
                 <div class="card-body">
                     <p style="font-weight: bold; color: orange;">〠{{ $clinic->postal_code }}</p>

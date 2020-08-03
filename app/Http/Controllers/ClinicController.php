@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Clinic;
 use App\Models\Comment;
 
@@ -53,12 +54,25 @@ class ClinicController extends Controller
               ->with('comments')
               ->with('images')
               ->get();
-        $all_clinic = $query->paginate(1);
+        $all_clinic = $query->paginate(10);
 
-        return view('clinics.index_pref', [
+        return view('clinics.index_city', [
             'all_clinic' => $all_clinic,
             'city_lists' => $city_lists
             //'pref_lists' => $pref_lists
+        ]);
+    }
+
+    public function show(Clinic $clinic, Comment $comment)
+    {
+        
+        $clinic = Clinic::findOrFail($clinic->id);
+
+        $comments = $comment->getComments($clinic->id);
+
+        return view('clinics.show', [
+            'clinic' => $clinic,
+            'comments' => $comments
         ]);
     }
 }
