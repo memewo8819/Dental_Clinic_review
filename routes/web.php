@@ -21,7 +21,7 @@ Route::get('/', 'ClinicController@searchClinic');
 
 Route::get('clinics/index_pref', 'ClinicController@index_pref')->name('clinics.index_pref');
 Route::get('clinics/index_city', 'ClinicController@index_city')->name('clinics.index_city');
-Route::resource('clinics', 'ClinicController', ['only' => ['show']]);
+Route::resource('clinics', 'ClinicController', ['only' => ['show', 'edit', 'update']]);
 
 // コメント関連
 Route::resource('comments', 'CommentController', ['only' => ['store']]);

@@ -75,4 +75,26 @@ class ClinicController extends Controller
             'comments' => $comments
         ]);
     }
+
+    public function edit(Clinic $clinic)
+    {
+        return view('clinics.edit', ['clinic' => $clinic]);
+    }
+
+    public function update(Request $request, Clinic $clinic)
+    {
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'clinic_name' => ['required', 'string', 'max:50'],
+            'postal_code' => ['required', 'string', 'max:20'],
+            'pref' => ['required', 'string', 'max:20'],
+            'city' => ['required', 'string', 'max:50'],
+            'town' => ['required', 'string', 'max:50'],
+            'tel' => ['required', 'string', 'max:20'],
+        ]);
+        $validator->validate();
+        $clinic->updateClinic($data);
+
+        return redirect('clinics/' .$clinic->id);
+    }
 }
