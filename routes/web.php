@@ -16,15 +16,18 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+Route::get('clinics/show', 'GmapController@view');
 
 Route::get('/', 'ClinicController@searchClinic');
 
 Route::get('clinics/index_pref', 'ClinicController@index_pref')->name('clinics.index_pref');
 Route::get('clinics/index_city', 'ClinicController@index_city')->name('clinics.index_city');
-Route::resource('clinics', 'ClinicController', ['only' => ['show', 'edit', 'update']]);
+Route::resource('clinics', 'ClinicController', ['only' => ['create', 'store', 'show', 'edit', 'update']]);
 
 // コメント関連
 Route::resource('comments', 'CommentController', ['only' => ['store']]);
+
+
 
 Auth::routes();
 

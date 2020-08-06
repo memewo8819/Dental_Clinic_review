@@ -1,12 +1,14 @@
 @extends('layouts.app')
-
+<script type="text/javascript" src="//maps.googleapis.com/maps/api/js?key={{ config('services.google-map.apikey') }}"></script>
 @section('content')
 <div class="container">
-    <div class="row justify-content-center mb-5">
-        <div class="col-md-8 mb-3">
+    <div class="row justify-content-center">
+        <div class="col-md-10 mb-3">
             <div class="card">
                 <div class="card-haeder p-3 w-100 d-flex">
-                    {{-- <img src="{{ asset('storage/profile_image/' .) }}" class="rounded-circle" width="50" height="50"> --}}
+                    @foreach($clinic->images as $image)
+                        <img src="{{ $image->image_path }}" class="rounded-circle" width="100" height="100">
+                    @endforeach    
                     <div class="ml-2 d-flex flex-column">
                         <p class="mb-0">
                             {{ $clinic->clinic_name }}<br>
@@ -19,62 +21,52 @@
                         <p class="mb-0 text-secondary"></p>
                     </div>
                 </div>
+
                 <div class="card-body">
                     {{-- @foreach($clinic->comments as $comment)
                         <p>{{ $comment->post_name }}{{ $comment->created_at }}
                         <p>{{ $comment->text }}</p>
                     @endforeach --}}
                 </div>
-                {{-- <div class="card-footer py-1 d-flex justify-content-end bg-white">
-                    @if ($tweet->user->id === Auth::user()->id)
-                        <div class="dropdown mr-3 d-flex align-items-center">
-                            <a href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-ellipsis-v fa-fw"></i>
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <form method="POST" action="{{ url('tweets/' .$tweet->id) }}" class="mb-0">
-                                    @csrf
-                                    @method('DELETE')
-
-                                    <a href="{{ url('tweets/' .$tweet->id .'/edit') }}" class="dropdown-item">編集</a>
-                                    <button type="submit" class="dropdown-item del-btn">削除</button>
-                                </form>
-                            </div>
-                        </div>
-                    @endif
-                    <div class="mr-3 d-flex align-items-center">
-                        <a href="{{ url('tweets/' .$tweet->id) }}"><i class="far fa-comment fa-fw"></i></a>
-                        <p class="mb-0 text-secondary">{{ count($tweet->comments) }}</p>
-                    </div>
-
-                    <!-- ここから -->
-                    <div class="d-flex align-items-center">
-                        @if (!in_array($user->id, array_column($tweet->favorites->toArray(), 'user_id'), TRUE))
-                            <form method="POST" action="{{ url('favorites/') }}" class="mb-0">
-                                @csrf
-
-                                <input type="hidden" name="tweet_id" value="{{ $tweet->id }}">
-                                <button type="submit" class="btn p-0 border-0 text-primary"><i class="far fa-heart fa-fw"></i></button>
-                            </form>
-                        @else
-                            <form method="POST" action="{{ url('favorites/' .array_column($tweet->favorites->toArray(), 'id', 'user_id')[$user->id]) }}" class="mb-0">
-                                @csrf
-                                @method('DELETE')
-
-                                <button type="submit" class="btn p-0 border-0 text-danger"><i class="fas fa-heart fa-fw"></i></button>
-                            </form>
-                        @endif
-                        <p class="mb-0 text-secondary">{{ count($tweet->favorites) }}</p>
-                    </div> --}}
-                    <!-- ここまで -->
-
-                </div>
             </div>
         </div>
     </div>
 
     <div class="row justify-content-center">
-        <div class="col-md-8 mb-3">
+        <div class="col-md-10 mb-3">
+            <div class="card">
+            <div id="map" style="width:100%; height:400px">Gmap</div>
+                <script type='text/javascript'>
+                    var map;
+                    function map_canvas() {
+
+                        //初期位置に上記配列の最初の緯度経度を格納
+                        var latlng = new google.maps.LatLng({!! $clinic->lat !!}, {!! $clinic->lng !!});
+                        var opts = {
+                            zoom: 18,
+                            center: latlng,
+                            mapTypeId: google.maps.MapTypeId.ROADMAP,
+                        }
+
+                        //地図を表示させるエリアのidを指定
+                        var map = new google.maps.Map(document.getElementById('map'), opts);
+                        var bounds = new google.maps.LatLngBounds();
+                        var infoWindow = new google.maps.InfoWindow();
+                        
+                        //マーカーの配置
+                        marker = new google.maps.Marker({
+                            position: new google.maps.LatLng({lat: {!! $clinic->lat !!}, lng: {!! $clinic->lng !!}}),
+                            map: map
+                        });
+                    }
+                    google.maps.event.addDomListener(window, 'load', map_canvas);
+                </script>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-10 mb-3">
             <ul class="list-group">
                 @forelse ($comments as $comment)
                     <li class="list-group-item">
@@ -100,12 +92,16 @@
                         <form method="POST" action="{{ route('comments.store') }}">
                             @csrf
 
+                            <div class="form-group row">
+                                <div class="col-md-4">
+                                    <input type="hidden" name="clinic_id" value="{{ $clinic->id }}">
+                                    <input type="text" name="post_name" value="" class="form-control">
+                                </div>
+                            </div>
+
                             <div class="form-group row mb-0">
                                 <div class="col-md-12">
-                                    <input type="hidden" name="clinic_id" value="{{ $clinic->id }}">
-                                    <input type="text" name="post_name" value="">
                                     <textarea class="form-control @error('text') is-invalid @enderror" name="text" required autocomplete="text" rows="4">{{ old('text') }}</textarea>
-
                                     @error('text')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -127,6 +123,9 @@
                 </li>
             </ul>
         </div>
+    </div>
+    <div class="my-4 d-flex justify-content-center">
+        {{ $comments->links() }}
     </div>
 </div>
 @endsection

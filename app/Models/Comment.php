@@ -17,7 +17,7 @@ class Comment extends Model
 
     public function getComments(Int $clinic_id)
     {
-        return $this->with('clinic')->where('clinic_id', $clinic_id)->get();
+        return $this->with('clinic')->where('clinic_id', $clinic_id)->orderBy('created_at', 'DESC')->paginate(10);
     }
 
     public function commentStore($clinic_id, Array $data)

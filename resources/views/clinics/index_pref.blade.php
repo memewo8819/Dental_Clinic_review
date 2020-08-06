@@ -3,32 +3,37 @@
 <div class="container">
     <div class="row justify-content-center">
         
-        <div class="col-md-10">
+        <div class="col-md-10 mb-3">
             <div class="card">
-            @foreach($city_lists as $key => $list)
                 <div class="card-haeder p-3 w-100 d-flex">
-                    <a onclick="document.form_{{ $key }}.submit();return false;"
-                        href="/?={{ $list->city }}">{{ $list->city }}</a>
-                    <form action="{{ route('clinics.index_city') }}" method="GET" class="form-horizontal" name="form_{{ $key }}"
-                        id="form_{{ $key }}">
-                        {{ csrf_field() }}
-                        <input type="hidden" name="city_code" value="{{ $list->city }}">
-                    </form>
+                    <h4>{{ $search_pref }}</h4>
                 </div>
-            @endforeach
+                @foreach($city_lists as $key => $list)
+                    <div class="card-haeder p-3 w-100 d-flex">
+                        <a onclick="document.form_{{ $key }}.submit();return false;"
+                            href="/?={{ $list->city }}">{{ $list->city }}</a>
+                        <form action="{{ route('clinics.index_city') }}" method="GET" class="form-horizontal" name="form_{{ $key }}"
+                            id="form_{{ $key }}">
+                            {{ csrf_field() }}
+                            <input type="hidden" name="city_code" value="{{ $list->city }}">
+                        </form>
+                    </div>
+                @endforeach
             </div>
         </div>
 
-        <div class="col-md-10">
-            @foreach($all_clinic as $clinic)
+        @foreach($all_clinic as $clinic)
+        <div class="col-md-10 mb-3">
             <div class="card">
                 <div class="card-haeder p-3 w-100 d-flex">
-                    @foreach($clinic->images as $image)
-                        <img src="{{ $image->image_path }}" width="300" alt="{{ $clinic->clinic_name }}">
-                    @endforeach
-                    <a href="{{ url('clinics/' .$clinic->id) }}" class="text-secondary">
-                        <p style="font-weight: bold; color: green;">{{ $clinic->clinic_name }}</p>
-                    </a>
+                    <div class="d-block">
+                        <a href="{{ url('clinics/' .$clinic->id) }}" class="text-secondary">
+                            <p style="font-weight: bold; color: green;">{{ $clinic->clinic_name }}</p>
+                        </a>
+                        @foreach($clinic->images as $image)
+                            <img src="{{ $image->image_path }}" width="300" alt="{{ $clinic->clinic_name }}">
+                        @endforeach
+                    </div>
                 </div>
                 <div class="card-body">
                     <p style="font-weight: bold; color: orange;">〠{{ $clinic->postal_code }}</p>
@@ -41,6 +46,9 @@
                         </a>
                     </p>
                     <p style="font-weight: bold; color: orange;">{{ $clinic->email }}</p>
+                    <a href="{{ url('clinics/' .$clinic->id) }}" class="text-secondary">
+                        <p style="font-weight: bold; color: green;">コメント：{{ $clinic->comments_count }}件</p>
+                    </a>
                 </div>
                 
                 {{-- @foreach($clinic->comments as $comment)
@@ -57,9 +65,9 @@
                 </div>
                 @endforeach --}}
             </div>
-            @endforeach
         </div>
-
+        @endforeach
+        
     </div>
 </div>
 <div class="my-4 d-flex justify-content-center">

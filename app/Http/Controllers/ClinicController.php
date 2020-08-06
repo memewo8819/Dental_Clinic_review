@@ -31,9 +31,13 @@ class ClinicController extends Controller
               ->with('comments')
               ->with('images')
               ->get();
-        $all_clinic = $query->paginate(2);
+        $all_clinic = $query->withCount('comments')->orderBy('comments_count', 'DESC')->paginate(2);
+
+        // $clinic_json = json_encode($all_clinic);
+        // dd($clinic_json);
 
         return view('clinics.index_pref', [
+            'search_pref' => $search_pref,
             'all_clinic' => $all_clinic,
             'city_lists' => $city_lists
             //'pref_lists' => $pref_lists
@@ -54,13 +58,37 @@ class ClinicController extends Controller
               ->with('comments')
               ->with('images')
               ->get();
-        $all_clinic = $query->paginate(10);
-
+        $all_clinic = $query->withCount('comments')->orderBy('comments_count', 'DESC')->paginate(10);
+        
         return view('clinics.index_city', [
             'all_clinic' => $all_clinic,
-            'city_lists' => $city_lists
+            'city_lists' => $city_lists,
             //'pref_lists' => $pref_lists
         ]);
+    }
+
+    public function create(Clinic $clinic)
+    {
+        return view('clinics.create', [
+            'id' => $clinic->id
+        ]);
+    }
+
+    public function store(Request $request, Clinic $clinic)
+    {
+        $data = $request->all();
+        $validator = Validator::make($data, [
+            'clinic_name' => ['required', 'string', 'max:50'],
+            'postal_code' => ['required', 'string', 'max:20'],
+            'pref' => ['required', 'string', 'max:20'],
+            'city' => ['required', 'string', 'max:50'],
+            'town' => ['required', 'string', 'max:50'],
+            'tel' => ['required', 'string', 'max:20'],
+        ]);
+        $validator->validate();
+        $clinic->updateClinic($data);
+
+        return redirect('clinics/' .$clinic->id);
     }
 
     public function show(Clinic $clinic, Comment $comment)

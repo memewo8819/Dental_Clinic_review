@@ -43,6 +43,7 @@ class Clinic extends Model
         $this->postal_code = $data['postal_code'];
         $this->pref = $data['pref'];
         $this->city = $data['city'];
+        $this->town = $data['town'];
         $this->site_url = $data['site_url'];
         $this->email = $data['email'];
         $this->tel = $data['tel'];
