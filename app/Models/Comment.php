@@ -29,6 +29,7 @@ class Comment extends Model
         } else {
             $this->post_name = "匿名";
         }
+        $this->review = $data['review'];
         $this->text = $data['text'];
         $this->save();
 

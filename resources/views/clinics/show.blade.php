@@ -74,6 +74,9 @@
                             <div class="ml-2 d-flex flex-column">
                                 <p class="mb-0">{{ $comment->post_name }}</p>
                             </div>
+                            <div class="ml-2 d-flex flex-column">
+                                <p class="mb-0">{{ config('score')[$comment->review] }}</p>
+                            </div>
                             <div class="d-flex justify-content-end flex-grow-1">
                                 <p class="mb-0 text-secondary">{{ $comment->created_at->format('Y-m-d H:i') }}</p>
                             </div>
@@ -96,6 +99,16 @@
                                 <div class="col-md-4">
                                     <input type="hidden" name="clinic_id" value="{{ $clinic->id }}">
                                     <input type="text" name="post_name" value="" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-md-3">
+                                    <select type="text" name="review" class="form-control">
+                                        @foreach(config('score') as $key => $score)
+                                            <option value="{{ $key }}">{{ $score }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
 

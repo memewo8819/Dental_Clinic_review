@@ -12,7 +12,9 @@ class CommentController extends Controller
     public function store(Request $request, Clinic $clinic, Comment $comment)
     {
         $data = $request->all();
+        
         $validator = Validator::make($data, [
+            'review' => ['required'],
             'text' => ['required', 'string', 'max:500']
         ]);
 
